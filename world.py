@@ -66,6 +66,8 @@ class RobotTargetWorld(ShowBase):
         self.accept('control-o', self.targetRandomMove )
         self.accept('control-s', self.saveBotCameraScreenshot)
 
+        
+
     # 3D Model loading functions
 
     def loadGround(self):
@@ -392,15 +394,12 @@ class RobotTargetWorld(ShowBase):
         Returns the RAM image corresponding to the current bot camera view
         as an np.array
         """
-        # Convert the array to a PIL Image and save as PNG in /output
         buffer = self.botCamTexture.getRamImageAs("RGB")
         buffer = np.asarray(memoryview(buffer))
         # for some reason the image is stored as (rows, cols, colors), with
         # rows inveerted upside down
         buffer = buffer.reshape(BOT_CAMERA_FILM_HEIGHT, BOT_CAMERA_FILM_WIDTH, 3)
         buffer = buffer[::-1, :, :] 
-
-        print(f"image type: {type(buffer)} shape: {buffer.shape} dtype {buffer.dtype}")
 
         return buffer
 

@@ -30,20 +30,13 @@ class BotWorldEnv(gym.Env):
         self.world = world
 
         self.observation_space = gym.spaces.Box(
-            low=np.array([-10.0, -10.0, -10.0, -10.0, -1.0, -1.0 ]), 
-            high=np.array([10.0, 10.0, 10.0, 10.0, 1.0, 1.0]), 
-            dtype=np.float32)
-        
+            low=0, high=255, shape=(60, 80, 3), dtype=np.uint8)
+
         self.action_space = gym.spaces.Discrete(3)
     
     def get_obs(self):
 
-        bot_pos = self.world.bot.getPos()
-        tgt_pos = self.world.target.getPos()
-        bot_yax = self.world.bot.getRelativeVector(render, (0, 1, 0))
-
-        # see comment in BotWorld.getBotTargetAngle concerning bot_yax x coordinate
-        obs = np.array([bot_pos.x, bot_pos.y, tgt_pos.x, tgt_pos.y, -bot_yax.x, bot_yax.y], dtype=np.float32)
+        obs = self.world.getBotCameraBuffer().copy()
 
         if not self.observation_space.contains(obs):
             # should never happen
@@ -73,6 +66,7 @@ class BotWorldEnv(gym.Env):
     def step(self, action):
 
         # print(f"env.step: action={action}")
+        base.graphicsEngine.renderFrame()
 
         #debug
         old_obs = self.get_obs()
@@ -121,20 +115,8 @@ class BotWorldEnv(gym.Env):
         info = {}
         obs = self.get_obs()
        
-        #debug
-        new_obs = obs
-        new_dist = self.world.getBotTargetDistance()
-        new_angle = self.world.getBotTargetAngle()
-        # debug(f"B: {old_obs[0]:.3f}, {old_obs[1]:.3f} | T: {old_obs[2]:.3f}, {old_obs[3]:.3f} | y: {old_obs[4]:.3f}, {old_obs[5]:.3f} | dst={old_dist:.3f}, ang={old_angle:.3f}\
-        #       \nACT:{action} \
-        #       \nB: {new_obs[0]:.3f}, {new_obs[1]:.3f} | T: {new_obs[2]:.3f}, {new_obs[3]:.3f} | y: {new_obs[4]:.3f}, {new_obs[5]:.3f} | dst={new_dist:.3f}, ang={new_angle:.3f}\
-        #       \nREW: {reward:.3f} \n")
-        debug(f"{old_obs[0]:.3f};{old_obs[1]:.3f};{old_obs[2]:.3f};{old_obs[3]:.3f};{old_obs[4]:.3f};{old_obs[5]:.3f};{old_dist:.3f};{old_angle:.3f};"+\
-              f"{action};" + \
-              f"{new_obs[0]:.3f};{new_obs[1]:.3f};{new_obs[2]:.3f};{new_obs[3]:.3f};{new_obs[4]:.3f};{new_obs[5]:.3f};{new_dist:.3f};{new_angle:.3f};"+\
-              f"{reward:.3f};{1 if valid_action else 0}")
-        #~debug
-
+        debug(f"action: {action}, valid: {1 if valid_action else 0} reward: {reward:.3f}")
+        
         return obs, reward, done, info
      
     def render(self, mode='infoframe'):

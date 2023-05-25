@@ -51,8 +51,9 @@ class BotAgent:
 
         if self.model_iterations == 0:
             debug("creating new agent")
+
             # no previously loaded agent, instantiate new one
-            self.agent = PPO("MlpPolicy", self.environment, verbose=1 
+            self.agent = PPO("CnnPolicy", self.environment, verbose=1 
                              , learning_rate=linear_schedule(initial_learning_rate))
         else:
             try:
@@ -76,6 +77,8 @@ class BotAgent:
         if self.agent == None or self.environment == None:
             raise
 
+        base.win.setActive(False)
+
         # eval_callback= EvalCallback(
         #     eval_env=self.environment,
         #     log_path=self.log_path
@@ -97,6 +100,8 @@ class BotAgent:
         )
         config['debug'] = debug_state
 
+        base.win.setActive(True)
+        
         print("learning terminated...")
     
 
