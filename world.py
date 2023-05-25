@@ -1,15 +1,6 @@
 from direct.showbase.ShowBase import ShowBase
 
-from panda3d.core import WindowProperties
-from panda3d.core import Vec2, Vec3, Vec4
-from panda3d.core import MouseWatcher, Point3, Plane
-from panda3d.core import PointLight, AmbientLight, DirectionalLight, LightAttrib
-from panda3d.core import TransparencyAttrib
-
-from panda3d.core import CollisionTraverser, CollisionNode, CollisionHandlerQueue, BitMask32
-from panda3d.core import CollisionSphere
-
-from panda3d.core import Camera, Texture, GraphicsOutput
+from panda3d.core import *
 
 from direct.task import Task
 from direct.gui.OnscreenImage import OnscreenImage
@@ -195,7 +186,14 @@ class RobotTargetWorld(ShowBase):
         skybox.setDepthWrite(0)
         skybox.setLightOff()
         skybox.reparentTo(self.render)
-        
+
+        # see: https://discourse.panda3d.org/t/changing-the-background-image-work-at-random-times-only/28594/1
+        # self.background = OnscreenImage(parent=render2dp, 
+        #                         image="./assets/skybox/blueprint-background.jpg") 
+        # base.cam2dp.node().getDisplayRegion(0).setSort(-99) 
+        # cannot make the bot camera display region not transparent in sky regions
+
+
     def setupMouseWatcher(self):
         """
         Initialize MouseWatcher to caputre mouse click events.
@@ -235,13 +233,15 @@ class RobotTargetWorld(ShowBase):
         """
 
         # self.botCam  = self.bot.attachNewNode(Camera("botCam"))
-        self.botCamBuffer = base.win.makeTextureBuffer(f'botCam', BOT_CAMERA_FILM_WIDTH, BOT_CAMERA_FILM_HEIGHT)
+        self.botCamBuffer = base.win.makeTextureBuffer(f'botCam', BOT_CAMERA_FILM_WIDTH, BOT_CAMERA_FILM_HEIGHT )
         
         self.botCamTexture = Texture()
-        self.botCamBuffer.addRenderTexture(self.botCamTexture, GraphicsOutput.RTM_copy_ram)
+        self.botCamBuffer.addRenderTexture(self.botCamTexture, 
+                                           GraphicsOutput.RTM_copy_ram
+                                           )
 
-        self.botCamBuffer.setSort(-100)
-        self.botCam  = base.makeCamera( self.botCamBuffer)
+        # self.botCamBuffer.setSort(-99)
+        self.botCam  = base.makeCamera( self.botCamBuffer )
 
         self.botCam.reparentTo(self.bot)
         self.botCam.setPos(0, 0.15, 0.5) 
@@ -387,27 +387,30 @@ class RobotTargetWorld(ShowBase):
         self.info_frame.setText(newtext)
         return Task.again
 
-    def getBotCameraBufferImage(self):
+    def getBotCameraBuffer(self):
         """
         Returns the RAM image corresponding to the current bot camera view
         as an np.array
         """
         # Convert the array to a PIL Image and save as PNG in /output
-        image = self.botCamTexture.getRamImageAs("RGB")
-        image = np.asarray(memoryview(image))
+        buffer = self.botCamTexture.getRamImageAs("RGB")
+        buffer = np.asarray(memoryview(buffer))
         # for some reason the image is stored as (rows, cols, colors), with
         # rows inveerted upside down
-        image = image.reshape(BOT_CAMERA_FILM_HEIGHT, BOT_CAMERA_FILM_WIDTH, 3)
-        image = image[::-1, :, :] 
-        image = Image.fromarray(np.uint8(image))
+        buffer = buffer.reshape(BOT_CAMERA_FILM_HEIGHT, BOT_CAMERA_FILM_WIDTH, 3)
+        buffer = buffer[::-1, :, :] 
 
-        return image
+        print(f"image type: {type(buffer)} shape: {buffer.shape} dtype {buffer.dtype}")
+
+        return buffer
 
     def saveBotCameraScreenshot(self):
         """
         saves the current bot camera view as png file
         """
-        image = self.getBotCameraBufferImage()
+        buffer = self.getBotCameraBuffer()
+        image = Image.fromarray(np.uint8(buffer))
+
         current_datetime = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"output/{current_datetime}.png"
         image.save(filename)
