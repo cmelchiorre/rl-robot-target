@@ -41,7 +41,7 @@ class RobotTargetWorld(ShowBase):
         self.dlight_np = self.createDirectionalLight()
         self.alight_np = self.createAmbientLight()
         
-        render.setShaderAuto()
+        self.render.setShaderAuto()
 
         # set viewport stuff
         self.setupCamera()
@@ -120,7 +120,6 @@ class RobotTargetWorld(ShowBase):
         dir_light_node_path = render.attachNewNode(dir_light)
         dir_light_node_path.setHpr(45, -45, 0)
         
-        self.render.setShaderAuto()
         self.render.setLight(dir_light_node_path)
 
         return dir_light_node_path
