@@ -25,7 +25,8 @@ sdist/
 var/
 *.egg-info/
 .installed.cfg
-*.egg
+# egg is the same extesion used for panda3d models
+# *.egg 
 
 # Installer logs
 pip-log.txt

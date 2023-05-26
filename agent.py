@@ -87,7 +87,9 @@ class BotAgent:
         checkpoint_callback = CheckpointCallback( \
             save_freq=config['save_freq'], 
             save_path=f"{self.model_path}/{self.model_prefix}", 
-            name_prefix=f"{self.model_prefix}")
+            name_prefix=f"{self.model_prefix}",
+            save_best_only=True, monitor='episode_reward_mean'
+            )
 
         debug_state = config['debug']
         config['debug'] = False
