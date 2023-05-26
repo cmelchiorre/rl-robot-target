@@ -1,0 +1,87 @@
+<CoordinateSystem> { Z-up } 
+<Material> Sky {
+  <Scalar> baser { 1.0 }
+  <Scalar> baseg { 1.0 }
+  <Scalar> baseb { 1.0 }
+  <Scalar> basea { 1.0 }
+  <Scalar> ambr { 1.0 }
+  <Scalar> ambg { 1.0 }
+  <Scalar> ambb { 1.0 }
+  <Scalar> amba { 1.0 }
+  <Scalar> emitr { 0.0 }
+  <Scalar> emitg { 0.0 }
+  <Scalar> emitb { 0.0 }
+  <Scalar> emita { 1.0 }
+  <Scalar> specr { 1.0 }
+  <Scalar> specg { 1.0 }
+  <Scalar> specb { 1.0 }
+  <Scalar> speca { 1.0 }
+  <Scalar> shininess { 0.5 }
+  <Scalar> roughness { 0.5 }
+  <Scalar> metallic { 0.0 }
+  <Scalar> ior { 1.4500000476837158 }
+  <Scalar> local { 1 }
+}
+
+<Texture> blueprint-background.jpg {
+  "./blueprint-background.jpg"
+  <Scalar> format { rgb }
+  <Scalar> envtype { modulate }
+  <Scalar> uv-name { UVMap }
+  <Scalar> minfilter { linear_mipmap_linear }
+  <Scalar> magfilter { linear }
+  <Scalar> wrapu { repeat }
+  <Scalar> wrapv { repeat }
+  <Scalar> alpha { off }
+}
+
+  <Group> Sphere {
+    <Transform> {
+      <Matrix4> {
+        1.2799999713897705 0.0 0.0 0.0 
+        0.0 1.0 0.0 0.0 
+        0.0 0.0 0.7200000286102295 0.0 
+        0.0 0.0 0.0 1.0 
+      }
+    }
+    
+    <VertexPool> Sphere {
+    
+      <Vertex> 0 {
+        -1.280000 0.000000 -0.720000
+        <UV> UVMap {
+          0.000000 0.000000 
+        }
+        <RGBA> { 1 1 1 1 }
+      }
+      <Vertex> 1 {
+        1.280000 0.000000 -0.720000
+        <UV> UVMap {
+          1.000000 0.000000 
+        }
+        <RGBA> { 1 1 1 1 }
+      }
+      <Vertex> 2 {
+        1.280000 0.000000 0.720000
+        <UV> UVMap {
+          1.000000 1.000000 
+        }
+        <RGBA> { 1 1 1 1 }
+      }
+      <Vertex> 3 {
+        -1.280000 0.000000 0.720000
+        <UV> UVMap {
+          0.000000 1.000000 
+        }
+        <RGBA> { 1 1 1 1 }
+      }}
+    
+    
+    <Polygon> {
+      <TRef> { blueprint-background.jpg }
+      <MRef> { Sky }
+      <Normal> {0.000000 -1.000000 0.000000}
+      <BFace> { 1 }
+      <VertexRef> { 0 1 2 3 <Ref> { Sphere }} 
+    }
+  }
