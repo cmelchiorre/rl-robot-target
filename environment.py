@@ -97,13 +97,15 @@ class BotWorldEnv(gym.Env):
             old_angle = self.world.getBotTargetAngle()
             self.world.bot.rotateLeft(angle=AGENT_ROTATE_STEP)
             new_angle = self.world.getBotTargetAngle()
-            reward = (old_angle - new_angle)
+            # reward = (old_angle - new_angle)
+            reward = 0
 
         if action == ACTION_TURN_RIGHT:
             old_angle = self.world.getBotTargetAngle()
             self.world.bot.rotateRight(angle=AGENT_ROTATE_STEP)
             new_angle = self.world.getBotTargetAngle()
-            reward = (old_angle - new_angle)
+            # reward = (old_angle - new_angle)
+            reward = 0
 
         reward -= REWARD_STEP_PENALTY
 
