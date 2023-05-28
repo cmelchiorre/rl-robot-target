@@ -300,11 +300,7 @@ class RobotTargetWorld(ShowBase):
         """
         # Check if any collisions occurred
         self.cTrav.traverse(self.render)
-        if self.cHandler.getNumEntries() > 0:  
-            print("target reached")
-            return True
-        else:
-            return False
+        return self.cHandler.getNumEntries() > 0
         
     def startLearn(self):
         """
@@ -322,7 +318,6 @@ class RobotTargetWorld(ShowBase):
         """
         self.playing = True
         self.bot.agent.play(n_max_steps_per_episode=config['n_max_steps_per_episode'])
-
 
     # Utility functions
 

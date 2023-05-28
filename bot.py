@@ -22,7 +22,7 @@ class Bot(NodePath):
         self.agent = BotAgent(world=self.world, 
                               model_path=config['model_path'], 
                               model_prefix=config['model_prefix'], 
-                              model_saved_iterations=config['model_saved_iterations'],
+                              best_model=config.get('best_model', None),
                               log_path=config['log_path']
                               )
         
@@ -86,6 +86,4 @@ class Bot(NodePath):
         heading = self.getH()
         self.setH( heading - angle )
 
-
-# class BotTracker:
 
