@@ -18,6 +18,7 @@ class InfoFrame:
         self.frame = DirectFrame(frameColor=(0, 0, 0, .5),
                     frameSize=frame_size, 
                     pos=frame_pos,
+                    parent=aspect2d
                 )
         
         self.textLabel = DirectLabel(

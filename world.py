@@ -30,6 +30,8 @@ class RobotTargetWorld(ShowBase):
 
         wp = WindowProperties()
         wp.setSize(1200, 720)
+        #wp.setSize(1920, 1080)
+    
         self.win.requestProperties(wp)
 
         # load models from the environment default folder Lib\site-packages\panda3d\models
@@ -45,9 +47,10 @@ class RobotTargetWorld(ShowBase):
 
         # set viewport stuff
         self.setupCamera()
+        self.setupMouseWatcher()
+
         self.setupCrosshair()
         self.setupSkybox()
-        self.setupMouseWatcher()
 
         # set collision system
         self.setupCollisions()
@@ -233,7 +236,6 @@ class RobotTargetWorld(ShowBase):
         see: self.getBotCameraBufferImage
         """
 
-        # self.botCam  = self.bot.attachNewNode(Camera("botCam"))
         self.botCamBuffer = base.win.makeTextureBuffer(f'botCam', BOT_CAMERA_FILM_WIDTH, BOT_CAMERA_FILM_HEIGHT )
         
         self.botCamTexture = Texture()
@@ -253,7 +255,6 @@ class RobotTargetWorld(ShowBase):
         botCamDispRegion = base.win.makeDisplayRegion(0.75, 0.95, 0.05, 0.3 )
         botCamDispRegion.setCamera(self.botCam)
         botCamDispRegion.setClearDepthActive(True)
-
 
     # Action functions
 
